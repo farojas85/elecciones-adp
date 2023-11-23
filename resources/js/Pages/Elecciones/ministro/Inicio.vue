@@ -80,7 +80,7 @@
                                             height="32">
                                     </td>
                                     <td v-text="ministro.persona.nombres+' '+ministro.persona.apellido_paterno+' '+ministro.persona.apellido_materno"></td>
-                                    <td v-text="ministro.grado_ministerial.nombre"></td>
+                                    <td v-text="ministro.grado_ministerial?.nombre"></td>
                                     <td class="text-center">
                                         <span v-if="ministro.es_activo==1" class="badge badge-success">ACTIVO</span>
                                         <span v-if="ministro.es_activo==0" class="badge badge-danger">INACTIVO</span>

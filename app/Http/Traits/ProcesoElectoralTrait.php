@@ -194,7 +194,7 @@ trait ProcesoElectoralTrait
                 ->select(
                     'proceso_electorals.id', 'jd.nombre as junta_directiva',
                     DB::Raw("concat(pj.anio_inicio,' - ',pj.anio_fin) as periodo"),
-                    'cd.nombre as cargo_directivo', 'vp.abreviatura as vuelta_proceso'
+                    'cd.nombre as cargo_directivo', 'vp.nombre as vuelta_proceso'
                 )
                 ->where('proceso_electorals.es_activo',1)->where('proceso_electorals.finalizado',0)->orderBy('id','desc')
                 ->first()

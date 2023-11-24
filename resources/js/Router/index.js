@@ -11,6 +11,7 @@ import Configuracion from '@/Pages/Configuraciones/Inicio.vue'
 import Eleccion from '@/Pages/Elecciones/Inicio.vue'
 import Proceso from '@/Pages/Procesos/Inicio.vue'
 import EleccionVivo from '@/Pages/Procesos/eleccion-envivo/Inicio.vue'
+import Votacion from '@/Pages/Procesos/votacion/Inicio.vue';
 // import Profile from '@/components/views/perfil/Inicio'
 // import Organizacion from '../components/views/organizacion/Inicio'
 
@@ -41,6 +42,10 @@ const routes = [
     },
     {
         path: '/eleccion-live', name:'Elección En Vivo', component: EleccionVivo ,
+        meta:{ layout: LayoutLive}
+    },
+    {
+        path: '/votacion', name:'Votación', component: Votacion ,
         meta:{ layout: LayoutLive}
     },
     // {

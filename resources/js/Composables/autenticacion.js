@@ -17,6 +17,10 @@ export default function useAutenticacion() {
         try {
             const response = await axios.post('api/login',data)
 
+            // if(response.status == 422) {
+            //     errors.value = response.data.errors
+            // }
+
             if(response.data.token)
             {
                 localStorage.setItem('token-api',response.data.token)
@@ -26,7 +30,15 @@ export default function useAutenticacion() {
             {
                 localStorage.setItem('user-logged',JSON.stringify(response.data.user) )
 
-                window.location.href="principal"
+                let user = response.data.user
+
+                if(user && user.roles[0].slug== 'mesa')
+                {
+                    window.location.href = "votacion"
+                }
+                else {
+                    window.location.href="principal"
+                }
             }
 
         } catch (error) {
@@ -36,8 +48,8 @@ export default function useAutenticacion() {
         }
     }
 
-    const logoutUsuario = async() => {
-        const respuesta = await axios.post('api/logout',config)
+    const logoutUsuario = async(id) => {
+        const respuesta = await axios.post('api/logout',{id:id},config)
 
         if(respuesta.data.ok==1)
         {

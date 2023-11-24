@@ -40,21 +40,21 @@ export default function useHelper() {
     }
 
     const cargarClasesLoginLayout = () => {
-        $('body').removeClass("hold-transition sidebar-mini layout-fixed")
-        $('body').removeClass("hold-transition layout-top-nav")
+        $('body').removeClass("hold-transition sidebar-mini layout-navbar-fixed")
+        $('body').removeClass("hold-transition layout-top-nav layout-navbar-fixed")
         $('body').addClass('login-page')
     }
 
     const cargarClasesDefaultLayout = () => {
         $('body').removeClass('login-page')
-        $('body').removeClass("hold-transition layout-top-nav")
-        $('body').addClass("hold-transition sidebar-mini layout-fixed")
+        $('body').removeClass("hold-transition layout-top-nav layout-navbar-fixed")
+        $('body').addClass("hold-transition sidebar-mini layout-navbar-fixed")
     }
 
     const cargarClasesLiveLayout = () => {
         $('body').removeClass('login-page')
-        $('body').removeClass("hold-transition sidebar-mini layout-fixed")
-        $('body').addClass('hold-transition layout-top-nav')
+        $('body').removeClass("hold-transition sidebar-mini layout-navbar-fixed")
+        $('body').addClass('hold-transition layout-top-nav layout-navbar-fixed')
     }
 
     const Toast = Swal.mixin({

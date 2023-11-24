@@ -76,4 +76,28 @@ class ProcesoElectoralController extends Controller
     {
         //
     }
+
+    public function habilitar(Request $request)
+    {
+        $proceso_electoral = ProcesoElectoral::find($request->id);
+        $proceso_electoral->es_activo = 1;
+        $proceso_electoral->save();
+
+        return response()->json([
+            'ok' => 1,
+            'mensaje' => 'Proceso Electoral habilitado satisfactoriamente'
+        ],200);
+    }
+
+    public function inhabilitar(Request $request)
+    {
+        $proceso_electoral = ProcesoElectoral::find($request->id);
+        $proceso_electoral->es_activo = 0;
+        $proceso_electoral->save();
+
+        return response()->json([
+            'ok' => 1,
+            'mensaje' => 'Proceso Electoral inhabilitado satisfactoriamente'
+        ],200);
+    }
 }

@@ -38,8 +38,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('login',[LoginController::class,'login']);
 
 Route::group(['middleware' => ['auth:sanctum']],function(){
-
     Route::post('logout',[LoginController::class,'logout']);
+
     Route::apiResource('usuarios', UserController::class);
     Route::apiResource('tipo-accesos',TipoAccesoController::class);
     Route::apiResource('roles',RoleController::class);

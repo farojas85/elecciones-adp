@@ -86,10 +86,97 @@ export default function useProcesoElectoral() {
         proceso_electoral.value =responded.data
     }
 
+    const habilitarProcesoElectoral = async(id) => {
+        errors.value = ''
+        try {
+            let responded = await axios.post('api/proceso-electorales-habilitar',{id:id},config)
+            errors.value =''
+            if(responded.data.ok==1){
+                respuesta.value=responded.data
+            }
+
+        } catch (error) {
+            errors.value=""
+            if(error.response.status === 422) {
+                errors.value = error.response.data.errors
+            }
+        }
+    }
+
+    const inhabilitarProcesoElectoral = async(id) => {
+        errors.value = ''
+        try {
+            let responded = await axios.post('api/proceso-electorales-inhabilitar',{id:id},config)
+            errors.value =''
+            if(responded.data.ok==1){
+                respuesta.value=responded.data
+            }
+
+        } catch (error) {
+            errors.value=""
+            if(error.response.status === 422) {
+                errors.value = error.response.data.errors
+            }
+        }
+    }
+
+    const registrarCandidatoProceso = async(data) => {
+        errors.value = ''
+        try {
+            let responded = await axios.post('api/proceso-electorales-registrar-candidato-proceso',data,config)
+            errors.value =''
+            if(responded.data.ok==1){
+                respuesta.value=responded.data
+            }
+
+        } catch (error) {
+            errors.value=""
+            if(error.response.status === 422) {
+                errors.value = error.response.data.errors
+            }
+        }
+    }
+
+    const registrarVotacion = async(data) => {
+        errors.value = ''
+        try {
+            let responded = await axios.post('api/proceso-electorales-registro-votacion',data,config)
+            errors.value =''
+            if(responded.data.ok==1){
+                respuesta.value=responded.data
+            }
+
+        } catch (error) {
+            errors.value=""
+            if(error.response.status === 422) {
+                errors.value = error.response.data.errors
+            }
+        }
+    }
+
+    const pasarSiguienteVotacion = async(data) => {
+        errors.value = ''
+        try {
+            let responded = await axios.post('api/proceso-electorales-siguiente-votacion',data,config)
+            errors.value =''
+            if(responded.data.ok==1){
+                respuesta.value=responded.data
+            }
+
+        } catch (error) {
+            errors.value=""
+            if(error.response.status === 422) {
+                errors.value = error.response.data.errors
+            }
+        }
+    }
+
     return {
         errors, respuesta, procesos_electorales, proceso_electoral,
         junta_directivas, periodo_juntas, cargo_directivos, vuelta_procesos,
         obtenerProcesosElectorales, obtenerDatosIniciales, agregarProcesoElectoral,
-        obtenerProcesosElectoral, actualizarProcesoElectoral, obtenerProcesoElectoralActivo
+        obtenerProcesosElectoral, actualizarProcesoElectoral, obtenerProcesoElectoralActivo,
+        habilitarProcesoElectoral, inhabilitarProcesoElectoral, registrarCandidatoProceso,
+        registrarVotacion,pasarSiguienteVotacion
     }
 }

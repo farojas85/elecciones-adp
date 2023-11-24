@@ -56,4 +56,14 @@ class Ministro extends Model
     //                 ->using(GradoMinisterialMinistro::class)
     //                 ->withTimestamps()->withPivot(['fecha_inicio','ficha_fin', 'es_activo']);
     // }
+
+    /**
+     * Get all of the proceso_electoral_votos for the Ministro
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function proceso_electoral_votos(): HasMany
+    {
+        return $this->hasMany(ProcesoElectoralVoto::class);
+    }
 }

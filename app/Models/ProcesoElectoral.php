@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ProcesoElectoral extends Model
 {
@@ -34,5 +35,15 @@ class ProcesoElectoral extends Model
     public function vuelta_proceso(): BelongsTo
     {
         return $this->belongsTo(VueltaProceso::class);
+    }
+
+    /**
+     * Get all of the proceso_electoral_votos for the ProcesoElectoral
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function proceso_electoral_votos(): HasMany
+    {
+        return $this->hasMany(ProcesoElectoralVoto::class);
     }
 }

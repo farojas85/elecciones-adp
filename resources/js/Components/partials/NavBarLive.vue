@@ -79,7 +79,7 @@ export default {
         const t = ref('')
 
         const cerrarSesion = async ()  => {
-            await logoutUsuario()
+            await logoutUsuario(datoSession.id)
         }
 
 

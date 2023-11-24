@@ -8,7 +8,8 @@ const { defineTitle, Swal,Toast } = useHelper();
 
 const {
     errors, respuesta, procesos_electorales, proceso_electoral,
-    obtenerProcesosElectorales, obtenerProcesosElectoral
+    obtenerProcesosElectorales, obtenerProcesosElectoral, habilitarProcesoElectoral,
+    inhabilitarProcesoElectoral
 } = useProcesoElectoral();
 
 const offset = 4
@@ -139,6 +140,64 @@ const editar = async(id) => {
     form.value.estadoCrud = 'editar';
     $('#modal-proceso-electoral-title').html("Editar Proceso Electoral");
     $('#modal-proceso-electoral').modal('show');
+}
+
+const inhabilita = async (id) => {
+    await inhabilitarProcesoElectoral(id)
+    if(respuesta.value.ok==1) {
+        errors.value=[]
+        Toast.fire({
+            icon: 'success',
+            title: respuesta.value.mensaje
+        })
+    }
+}
+
+const inhabilitar = (id) => {
+        Swal.fire({
+        title: 'Ámbitos juntas',
+        text:'¿Está seguro de inhabilitar el Proceso Electoral',
+        icon:'question',
+        confirmButtonColor: "#28a745",
+        confirmButtonText: "Si",
+        showCancelButton: true,
+        cancelButtonText: "No",
+        cancelButtonColor:'#c82333'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            inhabilita(id)
+            listar()
+        }
+    })
+}
+
+const habilita = async (id) => {
+    await habilitarProcesoElectoral(id)
+    if(respuesta.value.ok==1) {
+        errors.value=[]
+        Toast.fire({
+            icon: 'success',
+            title: respuesta.value.mensaje
+        })
+    }
+}
+
+const habilitar = (id) => {
+        Swal.fire({
+        title: 'Ámbitos juntas',
+        text:'¿Está seguro de habilitar el Proceso Electoral',
+        icon:'question',
+        confirmButtonColor: "#28a745",
+        confirmButtonText: "Si",
+        showCancelButton: true,
+        cancelButtonText: "No",
+        cancelButtonColor:'#c82333'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            habilita(id)
+            listar()
+        }
+    })
 }
 </script>
 <template>

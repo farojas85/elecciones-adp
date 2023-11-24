@@ -5,7 +5,7 @@
     const { errors, loginUsuario } = useAutenticacion()
 
     const usuario = reactive({
-        email: '',
+        name: '',
         password: ''
     })
 
@@ -18,7 +18,7 @@
 <template>
     <div class="card card-outline card-primary">
         <div class="card-header text-center">
-            <a href="/" class="h1"><b>Sufragio</b>ADP</a>
+            <a href="/" class="h1"><b>Elecciones</b>ADP</a>
         </div>
         <div class="card-body">
             <p class="login-box-msg">Iniciar Sesi&oacute;n</p>
@@ -26,16 +26,16 @@
                 <div class="form-group row">
                     <div class="col-md-12">
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Correo Electrónico"
-                                v-model="usuario.email"
-                                :class="{ 'is-invalid' : errors.email }"/>
+                            <input type="text" class="form-control" placeholder="Nombre de Usuario"
+                                v-model="usuario.name"
+                                :class="{ 'is-invalid' : errors.name }"/>
                             <div class="input-group-append">
                                 <div class="input-group-text">
-                                <span class="fas fa-envelope"></span>
+                                <span class="fas fa-user"></span>
                                 </div>
                             </div>
                         </div>
-                        <small class="text-danger" v-for="error in errors.email"
+                        <small class="text-danger" v-for="error in errors.name"
                             :key="error">{{ error }}</small>
                     </div>
                 </div>

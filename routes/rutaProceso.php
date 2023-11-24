@@ -23,5 +23,12 @@ Route::group(['middleware' => ['auth:sanctum']],function(){
     Route::get('proceso-electorales-mostrar',[ProcesoElectoralController::class,'show']);
     Route::post('proceso-electorales-actualizar',[ProcesoElectoralController::class,'update']);
     Route::get('proceso-electorales-activo',[ProcesoElectoralController::class,'obtenerProcesoElectoralActivo']);
+    Route::post('proceso-electorales-inhabilitar',[ProcesoElectoralController::class,'inhabilitar']);
+    Route::post('proceso-electorales-habilitar',[ProcesoElectoralController::class,'habilitar']);
+    Route::post('proceso-electorales-registrar-candidato-proceso',[ProcesoElectoralController::class,'registrarCandidatosEnProceso']);
+    Route::get('proceso-electorales-votacion-en-proceso',[ProcesoElectoralController::class,'votacionEnProceso']);
+    Route::post('proceso-electorales-registro-votacion',[ProcesoElectoralController::class,'registrarVotacion']);
+    Route::post('proceso-electorales-siguiente-votacion',[ProcesoElectoralController::class,'pasarSiguienteVotacion']);
+
     // Route::post('proceso-electorales-store',[ProcesoElectoralController::class,'store']);
 });

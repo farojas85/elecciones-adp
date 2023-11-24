@@ -4,7 +4,7 @@
         <a href="/principal" class="brand-link">
             <img src="adminlte/dist/img/ADP_128.jpg" alt="AdminLTE Logo"
                 class="brand-image img-circle elevation-3" style="opacity: 0.8" />
-            <span class="brand-text font-weight-bold">SufragioADP</span>
+            <span class="brand-text font-weight-bold">EleccionesADP</span>
         </a>
 
         <!-- Sidebar -->

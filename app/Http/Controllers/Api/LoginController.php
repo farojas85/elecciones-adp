@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\Auth\LoginRequest;
 
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class LoginController extends Controller
 {
@@ -17,11 +18,11 @@ class LoginController extends Controller
         $request->validated();
 
         $credenciales = [
-            'email' => $request->email, 'password' => $request->password,
+            'name' => $request->name, 'password' => $request->password,
             'es_activo' => 1
         ];
 
-        $user = User::where('email',$request->email)->first();
+        $user = User::where('name',$request->name)->first();
 
         if($user)
         {
@@ -41,7 +42,7 @@ class LoginController extends Controller
 
                     if($usuario->roles->count()==0){
                         return response()->json([
-                            'errors' => ['email' => 'No tiene rol(es) asignado(s)']
+                            'errors' => ['name' => 'No tiene rol(es) asignado(s)']
                         ],422);
                     }
                     foreach($usuario->roles as $role)
@@ -59,7 +60,7 @@ class LoginController extends Controller
                 }
                 else {
                     return response()->json([
-                        'errors' => ['email' => 'Usuario Suspendido']
+                        'errors' => ['name' => 'Usuario Suspendido']
                     ],422);
                 }
             }
@@ -71,17 +72,20 @@ class LoginController extends Controller
         }
         else {
             return response([
-                'errors' => [ 'email' => 'Correo Electrónico no registrado']
+                'errors' => [ 'name' => 'Usuario no registrado']
             ], 422);
         }
 
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
-        Auth::user()->tokens->each(function($token,$key){
-            $token->delete()  ;
-        });
+        $personal_access_tokens = DB::table('personal_access_tokens')
+                ->where('tokenable_id',$request->id)
+                ->delete();
+        // Auth::user()->tokens->each(function($token,$key){
+        //     $token->delete()  ;
+        // });
 
         return response()->json([
             'ok' => 1,

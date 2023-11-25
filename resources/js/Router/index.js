@@ -1,8 +1,9 @@
 import { createRouter, createWebHistory } from "vue-router";
 
-import LayoutDefault from '@/Layouts/AppLayoutDefault.vue'
-import LayoutLogin from '@/Layouts/AppLoginLayout.vue'
-import LayoutLive from '@/Layouts/AppLayoutLive.vue'
+import LayoutDefault from '@/Layouts/AppLayoutDefault.vue';
+import LayoutLogin from '@/Layouts/AppLoginLayout.vue';
+import LayoutLive from '@/Layouts/AppLayoutLive.vue';
+import LayoutMesa from '@/Layouts/AppLayoutMesa.vue';
 
 import Login from '@/Pages/Auth/Login.vue'
 import Principal from '@/Pages/Principal.vue'
@@ -47,11 +48,15 @@ const routes = [
     },
     {
         path: '/votacion', name:'Votación', component: Votacion ,
-        meta:{ layout: LayoutLive}
+        meta:{ layout: LayoutMesa}
     },
     {
         path: '/junta-elegida', name:'Junta Elegida', component: VistaElegido ,
         meta:{ layout: LayoutLive}
+    },
+    {
+        path: '/elegido-votacion', name:'Elegido Votacion', component: VistaElegido ,
+        meta:{ layout: LayoutMesa}
     },
     // {
     //     path: '/junta-elegida-app', name:'Junta Elegida', component: VistaElegido ,

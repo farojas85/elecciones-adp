@@ -171,12 +171,29 @@ export default function useProcesoElectoral() {
         }
     }
 
+    const registroDeGanador = async(data) => {
+        errors.value = ''
+        try {
+            let responded = await axios.post('api/proceso-electorales-registro-ganador',data,config)
+            errors.value =''
+            if(responded.data.ok==1){
+                respuesta.value=responded.data
+            }
+
+        } catch (error) {
+            errors.value=""
+            if(error.response.status === 422) {
+                errors.value = error.response.data.errors
+            }
+        }
+    }
+
     return {
         errors, respuesta, procesos_electorales, proceso_electoral,
         junta_directivas, periodo_juntas, cargo_directivos, vuelta_procesos,
         obtenerProcesosElectorales, obtenerDatosIniciales, agregarProcesoElectoral,
         obtenerProcesosElectoral, actualizarProcesoElectoral, obtenerProcesoElectoralActivo,
         habilitarProcesoElectoral, inhabilitarProcesoElectoral, registrarCandidatoProceso,
-        registrarVotacion,pasarSiguienteVotacion
+        registrarVotacion,pasarSiguienteVotacion, registroDeGanador
     }
 }

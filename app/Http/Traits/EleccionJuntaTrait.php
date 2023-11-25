@@ -1,11 +1,13 @@
 <?php
 namespace App\Http\Traits;
 
+use App\Models\CargoDirectivo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\EleccionJunta;
 use App\Models\EleccionJuntaCandidato;
 use Exception;
+use Illuminate\Support\Facades\Date;
 
 trait EleccionJuntaTrait
 {
@@ -106,6 +108,43 @@ trait EleccionJuntaTrait
 
     }
 
+    public function obtenerEleccionJuntaActual() {
+        $eleccion_junta = EleccionJunta::join('periodo_juntas as pj','pj.id','=','eleccion_juntas.periodo_junta_id')
+                                ->join('junta_directivas as jd','jd.id','=','eleccion_juntas.junta_directiva_id')
+                                ->select(
+                                    'eleccion_juntas.id','periodo_junta_id','junta_directiva_id',
+                                    DB::Raw("concat(pj.anio_inicio,' - ',pj.anio_fin) as periodo"),
+                                    'jd.nombre as junta_directiva'
+                                )
+                                ->whereYear('fecha',date('Y'))
+                                ->first()
+        ;
+
+        $cargo_directivos = CargoDirectivo::join('cargo_directivo_eleccion_junta as cdej','cdej.cargo_directivo_id','=','cargo_directivos.id')
+                                ->select(
+                                    'cdej.id','cdej.cargo_directivo_id','cargo_directivos.nombre as cargo_directivo',
+                                    DB::Raw("(
+                                        select  concat(ps.apellido_paterno, ' ', ps.apellido_materno, ', ',ps.nombres) as candidato
+                                        from proceso_electorals as pe
+                                        inner join proceso_electoral_votos as pev on pev.proceso_electoral_id = pe.id
+                                        inner join ministros as mi on mi.id = pev.ministro_id
+                                        inner join personas as ps on ps.id = mi.persona_id
+                                        where pe.cargo_directivo_eleccion_junta_id = cdej.id and  pev.es_ganador =1
+                                    ) as candidato")
+                                )->where('cdej.eleccion_junta_id',$eleccion_junta->id)
+                                ->get();
+        $eleccion_junta['cargo_directivos'] = [];
+
+        if($cargo_directivos)
+        {
+            $eleccion_junta['cargo_directivos'] = $cargo_directivos;
+        }
+
+
+        return response()->json($eleccion_junta,200);
+
+
+    }
     public function eliminarCargoDirectivo(Request $request)
     {
         $eleccion_junta = EleccionJunta::with('cargo_directivos')->where('id', $request->id)->first();

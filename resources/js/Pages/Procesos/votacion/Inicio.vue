@@ -3,7 +3,10 @@ import { ref, onMounted, computed } from 'vue';
 import useHelper from '@/Helpers';
 import useProcesoElectoral from '@/Composables/proceso/proceso-electoral';
 
+const datoSession = JSON.parse(localStorage.getItem('user-logged'));
+
 const { Swal, Toast,soloNumeros } = useHelper();
+
 
 const {
     proceso_electoral, respuesta, errors,
@@ -20,7 +23,8 @@ const registrar = async () => {
     let data = {
         id: proceso_electoral.value.id,
         eleccion_junta_id: proceso_electoral.value.eleccion_junta_id,
-        numero_candidato: numero_candidato.value
+        numero_candidato: numero_candidato.value,
+        user_id:datoSession.id
     }
     await registrarVotacion(data);
     if(respuesta.value.ok==1)

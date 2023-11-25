@@ -7,7 +7,8 @@ const { Swal, Toast } = useHelper();
 
 const {
     proceso_electoral, respuesta, errors,
-    obtenerProcesoElectoralActivo, registrarCandidatoProceso, pasarSiguienteVotacion
+    obtenerProcesoElectoralActivo, registrarCandidatoProceso, pasarSiguienteVotacion,
+    registroDeGanador
 } = useProcesoElectoral();
 
 onMounted(() => {
@@ -18,7 +19,16 @@ const registrar = async () => {
     await registrarCandidatoProceso(proceso_electoral.value);
 }
 
-
+const registrarGanador = async() => {
+    await registroDeGanador(proceso_electoral.value);
+    if(respuesta.value.ok==1)
+    {
+        Toast.fire({
+            icon: 'success',
+            title: respuesta.value.mensaje
+        });
+    }
+}
 
 const seleccionarCandidatosEnProceso = async() => {
     let timerInterval;
@@ -48,27 +58,43 @@ const seleccionarCandidatosEnProceso = async() => {
     });
 }
 
+const no_procede = ref(null);
+
 const dos_tercios =   computed(() => {
     return Math.round((2*proceso_electoral.value.votos_validos/3)*100/100);
 });
 
-const no_procede = ref(true);
 
 const validarVotaciones = () => {
 
-    proceso_electoral.value.candidatos.every(c => {
-        if(c.cantidad_votos >= dos_tercios) {
-            return true;
+    let i=0;
+    let valor = false;
+
+    for(i=0;i< proceso_electoral.value.candidatos.length;i++)
+    {
+        if(proceso_electoral.value.candidatos[i].cantidad_votos >= dos_tercios.value) {
+            valor = true;
+            break;
         }
-    });
-    return false;
+    }
+
+    return valor;
 }
 
 const mostrarValidacion = () => {
+    no_procede.value=null;
     no_procede.value = validarVotaciones();
+    if(no_procede.value===true)
+    {
+        Swal.fire({
+            title: "Felicitaciones",
+            html: "El Candidato <b>"+proceso_electoral.value.candidatos[0].candidato+"</b>"+
+                    " ha ganado en el cargo de <b>"+proceso_electoral.value.cargo_directivo+"</b>"+
+                    " en <b>"+proceso_electoral.value.vuelta_proceso+"</b>",
+            icon: "success"
+        });
+    }
 }
-// const no_procede = computed(() =>{
-// })
 
 const pasaSiguienteVotacion = async() => {
     await pasarSiguienteVotacion(proceso_electoral.value)
@@ -204,6 +230,16 @@ const pasaSiguienteVotacion = async() => {
                                             <span class="font-weight-bold" style="font-size: 1.6rem">
                                                 <button class="btn btn-primary" @click="pasaSiguienteVotacion">
                                                     <i></i> Siguiente Votación
+                                                </button>
+                                            </span>
+                                        </p>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center" v-if="no_procede===true">
+                                        <p class="d-flex flex-column">
+                                            <span class="text-primary">Candidato alcanzó los 2/3 de votos !</span>
+                                            <span class="font-weight-bold" style="font-size: 1.6rem">
+                                                <button class="btn btn-primary" @click="registrarGanador">
+                                                    <i></i> Registrar ganador
                                                 </button>
                                             </span>
                                         </p>

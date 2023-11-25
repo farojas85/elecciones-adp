@@ -29,6 +29,7 @@ Route::group(['middleware' => ['auth:sanctum']],function(){
     Route::get('proceso-electorales-votacion-en-proceso',[ProcesoElectoralController::class,'votacionEnProceso']);
     Route::post('proceso-electorales-registro-votacion',[ProcesoElectoralController::class,'registrarVotacion']);
     Route::post('proceso-electorales-siguiente-votacion',[ProcesoElectoralController::class,'pasarSiguienteVotacion']);
+    Route::post('proceso-electorales-registro-ganador',[ProcesoElectoralController::class,'registrarGanador']);
 
     // Route::post('proceso-electorales-store',[ProcesoElectoralController::class,'store']);
 });

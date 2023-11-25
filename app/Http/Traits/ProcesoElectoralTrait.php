@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\ProcesoElectoral;
 use App\Models\ProcesoElectoralVoto;
+use App\Models\RegistroMesa;
 use App\Models\VueltaProceso;
 use Exception;
 use PhpParser\Node\Stmt\TryCatch;
@@ -230,7 +231,7 @@ trait ProcesoElectoralTrait
                                             ->join('cargo_directivo_eleccion_junta as cdej','cdej.id','=','pel.cargo_directivo_eleccion_junta_id')
                                             ->join('eleccion_juntas as ej','ej.id','=','cdej.eleccion_junta_id')
                                             ->where('ej.id','=','eleccion_junta_candidatos.eleccion_junta_id')
-                                            ->where(function($query) {
+                                            ->orWhere(function($query) {
                                                 $query->where('pev.no_continua',1)
                                                     ->orWhere('pev.es_ganador',1);
                                             });
@@ -439,7 +440,7 @@ trait ProcesoElectoralTrait
         }
 
         $eleccion_junta_candidato = EleccionJuntaCandidato::where('eleccion_junta_id','=',$request->eleccion_junta_id)
-                                        ->select('ministro_id')
+                                        ->select('ministro_id','id')
                                         ->where('numero_candidato',$request->numero_candidato)
                                         ->first();
 
@@ -483,6 +484,8 @@ trait ProcesoElectoralTrait
                 ], 422);
             }
             else if($proceso_electoral_voto) {
+
+                //Registramos los votos en el Proceso electoral
                 $proceso_electoral_voto->cantidad_votos = $proceso_electoral_voto->cantidad_votos  + 1;
                 $proceso_electoral_voto->save();
 
@@ -491,6 +494,25 @@ trait ProcesoElectoralTrait
                 $proceso_electoral->votos_emitidos = $proceso_electoral->votos_emitidos + 1;
                 $proceso_electoral->save();
 
+                //Guardamos en el registro de mesas
+                $registro_mesa = RegistroMesa::where('user_id', $request->user_id)
+                                    ->where('proceso_electoral_id',$request->id)
+                                    ->where('eleccion_junta_candidato_id',$eleccion_junta_candidato->id)
+                                    ->first();
+                if(!$registro_mesa)
+                {
+                    $registro_mesa = new registroMesa();
+                    $registro_mesa->user_id = $request->user_id;
+                    $registro_mesa->proceso_electoral_id = $request->id;
+                    $registro_mesa->eleccion_junta_candidato_id = $eleccion_junta_candidato->id;
+                    $registro_mesa->cantidad_votos = $registro_mesa->cantidad_votos + 1;
+                    $registro_mesa->save();
+                } else if($registro_mesa) {
+                    $registro_mesa->cantidad_votos = $registro_mesa->cantidad_votos + 1;
+                    $registro_mesa->save();
+                }
+
+                //GUARDAMO
                 return response()->json([
                     'ok' => 1,
                     'mensaje' => 'Voto registrado saisfactoriamente'
@@ -553,6 +575,26 @@ trait ProcesoElectoralTrait
                 'mensaje' => 'Pasa a la Tercera votación'
             ]);
         }
+    }
+
+    public function registrarGanador(Request $request)
+    {
+        $candidatos = $request->candidatos;
+        $cantidad_votos = array_column($candidatos, 'cantidad_votos');
+
+        array_multisort($cantidad_votos,SORT_DESC,$candidatos);
+
+        $proceso_electoral_voto = ProcesoElectoralVoto::where('proceso_electoral_id',$request->id)
+                ->where('ministro_id',$candidatos[0]['ministro_id'])
+                ->first();
+
+        $proceso_electoral_voto->es_ganador = 1;
+        $proceso_electoral_voto->save();
+
+        return response()->json([
+            'ok' => 1,
+            'mensaje' => 'Se ha registrado al ganador satisfactoriamente'
+        ]);
     }
 
 }

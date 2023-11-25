@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
@@ -71,5 +72,15 @@ class User extends Authenticatable
     public function clientes(): BelongsToMany
     {
         return $this->belongsToMany(Clientes::class)->withTimestamps();
+    }
+
+    /**
+     * Get all of the registro_mesas for the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function registro_mesas(): HasMany
+    {
+        return $this->hasMany(RegistroMesa::class);
     }
 }

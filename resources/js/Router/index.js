@@ -12,6 +12,7 @@ import Eleccion from '@/Pages/Elecciones/Inicio.vue'
 import Proceso from '@/Pages/Procesos/Inicio.vue'
 import EleccionVivo from '@/Pages/Procesos/eleccion-envivo/Inicio.vue'
 import Votacion from '@/Pages/Procesos/votacion/Inicio.vue';
+import VistaElegido from '@/Pages/Procesos/vista-elegidos/Inicio.vue';
 // import Profile from '@/components/views/perfil/Inicio'
 // import Organizacion from '../components/views/organizacion/Inicio'
 
@@ -48,6 +49,14 @@ const routes = [
         path: '/votacion', name:'Votación', component: Votacion ,
         meta:{ layout: LayoutLive}
     },
+    {
+        path: '/junta-elegida', name:'Junta Elegida', component: VistaElegido ,
+        meta:{ layout: LayoutLive}
+    },
+    // {
+    //     path: '/junta-elegida-app', name:'Junta Elegida', component: VistaElegido ,
+    //     meta:{ layout: LayoutDefault}
+    // },
     // {
     //     path: '/organizacion', name:'Organizacion', component: Organizacion ,
     //     meta:{ layout: 'AppLayoutDefault'}

@@ -47,6 +47,7 @@ Route::group(['middleware' => ['auth:sanctum']],function(){
     Route::post('eleccion-juntas-agregar-candidato',[EleccionJuntaController::class,'agregarCandidato']);
     Route::post('eleccion-justas-eliminar-candidato',[EleccionJuntaController::class,'eliminarCandidato']);
     Route::get('eleccion-juntas-candidatos',[EleccionJuntaCandidatoController::class,'obtenerCandidatosJunta']);
+    Route::get('eleccion-juntas-actual-elejidos',[EleccionJuntaController::class,'obtenerEleccionJuntaActual']);
 
     //VUELTA PROCESOS
     Route::get('vuelta-procesos-activos',[VueltaProcesoController::class,'activos']);

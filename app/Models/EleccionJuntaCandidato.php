@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class EleccionJuntaCandidato extends Model
 {
@@ -34,10 +35,22 @@ class EleccionJuntaCandidato extends Model
         return $this->belongsTo(Ministro::class);
     }
 
+    /**
+     * Get all of the registro_mesas for the EleccionJuntaCandidato
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function registro_mesas(): HasMany
+    {
+        return $this->hasMany(RegistroMesa::class);
+    }
+
     public static function generarNumeroCandidato($elecion_junta)
     {
         $maxId = Self::where('eleccion_junta_id',$elecion_junta)->count();
 
         return $maxId == 0 ? 1 : $maxId +1;
     }
+
+
 }

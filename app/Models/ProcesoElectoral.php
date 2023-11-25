@@ -46,4 +46,14 @@ class ProcesoElectoral extends Model
     {
         return $this->hasMany(ProcesoElectoralVoto::class);
     }
+
+    /**
+     * Get all of the registro_mesas for the ProcesoElectoral
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function registro_mesas(): HasMany
+    {
+        return $this->hasMany(RegistroMesa::class);
+    }
 }

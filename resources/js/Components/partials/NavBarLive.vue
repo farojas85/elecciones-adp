@@ -20,6 +20,12 @@
                             Elección En Vivo
                         </a>
                     </li>
+                    <li class="nav-item d-none d-sm-inline-block active">
+                        <a href="/junta-elegida" class="nav-link active">
+                            <i class="fa-solid fa-users-between-lines text-warning"></i>
+                            junta Elegida
+                        </a>
+                    </li>
                 </ul>
                 <!-- Right navbar links -->
                 <ul class="navbar-nav ml-auto">

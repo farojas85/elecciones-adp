@@ -185,6 +185,58 @@ trait ProcesoElectoralTrait
         }
     }
 
+    public function obtenerProcesoElectoralDetalles(Request $request)
+    {
+        $proceso_electoral = ProcesoElectoral::join('cargo_directivo_eleccion_junta as cdej','cdej.id','=','proceso_electorals.cargo_directivo_eleccion_junta_id')
+                ->join('cargo_directivos as cd','cd.id','=','cdej.cargo_directivo_id')
+                ->join('eleccion_juntas as ej','ej.id','=','cdej.eleccion_junta_id')
+                ->join('periodo_juntas as pj','pj.id','=','ej.periodo_junta_id')
+                ->join('junta_directivas as jd','jd.id','=','ej.junta_directiva_id')
+                ->join('vuelta_procesos as vp','vp.id','=','proceso_electorals.vuelta_proceso_id')
+                ->select(
+                    'proceso_electorals.id', 'jd.nombre as junta_directiva',
+                    DB::Raw("concat(pj.anio_inicio,' - ',pj.anio_fin) as periodo"),
+                    'cd.nombre as cargo_directivo', 'vp.nombre as vuelta_proceso',
+                    'proceso_electorals.fecha',
+                    DB::Raw("date_format(proceso_electorals.hora,'%h:%s %p') as hora_inicio"),
+                    DB::Raw("date_format(proceso_electorals.updated_at,'%h:%s %p') as hora_finaliza"),
+                    'cdej.eleccion_junta_id','votos_validos','votos_emitidos','votos_blancos'
+                )
+                ->where('proceso_electorals.id', $request->id)
+                ->first()
+        ;
+
+        $proceso_electoral_votos = ProcesoElectoralVoto::join('proceso_electorals','proceso_electorals.id','=','proceso_electoral_votos.proceso_electoral_id')
+            ->join('cargo_directivo_eleccion_junta as cdej','cdej.id','=','proceso_electorals.cargo_directivo_eleccion_junta_id')
+            ->join('cargo_directivos as cd','cd.id','=','cdej.cargo_directivo_id')
+            ->join('eleccion_juntas as ej','ej.id','=','cdej.eleccion_junta_id')
+            ->join('eleccion_junta_candidatos as ejd',function($join){
+                $join->on('ejd.eleccion_junta_id','=','ej.id')
+                    ->on('ejd.ministro_id','=','proceso_electoral_votos.ministro_id');
+            })
+            ->join('ministros as mi','mi.id','=','proceso_electoral_votos.ministro_id')
+            ->join('personas as per','per.id','=','mi.persona_id')
+            ->select(
+                'proceso_electoral_votos.id','ejd.ministro_id',
+                DB::Raw("LPAD(ejd.numero_candidato,2,'0') as numero_candidato"),
+                'proceso_electoral_votos.cantidad_votos',
+                DB::Raw("concat(upper(per.apellido_paterno),' ',upper(per.apellido_materno),', ',per.nombres) as candidato")
+            )
+            ->where('proceso_electoral_votos.proceso_electoral_id',$request->id)
+            ->where('proceso_electoral_votos.cantidad_votos','>',0)
+            ->orderBy('proceso_electoral_votos.cantidad_votos','desc')
+            ->get()
+        ;
+
+        $proceso_electoral['candidatos'] = [];
+        if($proceso_electoral_votos)
+        {
+            $proceso_electoral['candidatos'] = $proceso_electoral_votos;
+        }
+
+        return response()->json($proceso_electoral,200);
+    }
+
     public function obtenerProcesoElectoralActivo()
     {
 

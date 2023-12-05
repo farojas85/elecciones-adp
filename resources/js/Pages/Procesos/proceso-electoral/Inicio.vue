@@ -9,7 +9,7 @@ const { defineTitle, Swal,Toast } = useHelper();
 const {
     errors, respuesta, procesos_electorales, proceso_electoral,
     obtenerProcesosElectorales, obtenerProcesosElectoral, habilitarProcesoElectoral,
-    inhabilitarProcesoElectoral
+    inhabilitarProcesoElectoral, imprimirActaElectoral
 } = useProcesoElectoral();
 
 const offset = 4
@@ -199,6 +199,10 @@ const habilitar = (id) => {
         }
     })
 }
+
+const imprimeActa = async(id) => {
+    await imprimirActaElectoral(id);
+}
 </script>
 <template>
     <div class="card card-primary card-outline">
@@ -305,6 +309,10 @@ const habilitar = (id) => {
                                             title="Habilitar proceso Proceso"
                                             @click.prevent="habilitar(proceso.id)" v-if="proceso.es_activo==0">
                                             <i class="fas fa-check"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-primary btn-xs mr-1"
+                                            @click="imprimirActaElectoral(proceso.id)">
+                                            <i class="fas fa-print"></i>
                                         </button>
                                     </td>
                                 </tr>

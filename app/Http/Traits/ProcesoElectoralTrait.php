@@ -198,8 +198,8 @@ trait ProcesoElectoralTrait
                     DB::Raw("concat(pj.anio_inicio,' - ',pj.anio_fin) as periodo"),
                     'cd.nombre as cargo_directivo', 'vp.nombre as vuelta_proceso',
                     'proceso_electorals.fecha',
-                    DB::Raw("date_format(proceso_electorals.hora,'%h:%m %p') as hora_inicio"),
-                    DB::Raw("date_format(proceso_electorals.updated_at,'%h:%m %p') as hora_finaliza"),
+                    DB::Raw("date_format(proceso_electorals.hora,'%h:%i %p') as hora_inicio"),
+                    DB::Raw("date_format(proceso_electorals.updated_at,'%h:%i %p') as hora_finaliza"),
                     'cdej.eleccion_junta_id','votos_validos','votos_emitidos','votos_blancos'
                 )
                 ->where('proceso_electorals.id', $request->id)

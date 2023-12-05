@@ -34,7 +34,7 @@
 
     <!-- Scripts -->
     @routes
-    @vite(['/resources/js/app.js'])
+    @vite(['./resources/js/app.js'])
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed" translate="no">

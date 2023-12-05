@@ -306,12 +306,12 @@ export default function useProcesoElectoral() {
 
 
         doc.setFontSize(11).setFont("times","normal");
-        doc.text('Siendo las ',15,y+35,'left');
+        doc.text('Siendo las ',15,y+32,'left');
         doc.setFontSize(11).setFont("times","bold");
-        doc.text(proceso_electoral.value.hora_finaliza,42,y+35,'center');
-        doc.setLineDash([1, 0.5], 0).line(32, y+36, 52, y+36);
+        doc.text(proceso_electoral.value.hora_finaliza,42,y+32,'center');
+        doc.setLineDash([1, 0.5], 0).line(32, y+33, 52, y+33);
         doc.setFontSize(11).setFont("times","italic");
-        doc.text("finalizó el ACTO DE ESCRUTINIO.",53,y+35,'left');
+        doc.text("finalizó el ACTO DE ESCRUTINIO.",53,y+32,'left');
 
 
         doc.setLineDash([1, 0], 0).setLineWidth(0.2);
